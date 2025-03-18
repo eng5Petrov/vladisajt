@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта на Дупница с Маркер</title>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Карта на Дупница с Маркер</h1>
+    <div id="map"></div>
+
+    <script>
+        // Функция за инициализация на картата
+        function initMap() {
+            // Координати за центъра на картата (Дупница, България)
+            const dupnitsaCoords = { lat: 42.265870, lng: 23.118606 };
+
+            // Създаване на карта
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 16, // По-голям zoom за по-добър изглед на града
+                center: dupnitsaCoords,
+            });
+
+            // Добавяне на маркер в центъра на Дупница
+            let marker = new google.maps.Marker({
+                position: dupnitsaCoords,
+                map: map,
+                title: "Дупница, България",
+            });
+
+            // Добавяне на слушател за кликване на картата за поставяне на нов маркер
+            map.addListener("click", (event) => {
+                placeMarker(event.latLng, map);
+            });
+
+            // Функция за поставяне на маркер
+            const placeMarker = (location, map) => {
+                // Премахване на предишния маркер, ако има такъв
+                if (marker) {
+                    marker.setMap(null);
+                }
+
+                // Създаване на нов маркер
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                });
+
+                // Показване на координатите на маркера
+                const infowindow = new google.maps.InfoWindow({
+                    content: `Latitude: ${location.lat().toFixed(6)}<br>Longitude: ${location.lng().toFixed(6)}`,
+                });
+                infowindow.open(map, marker);
+            };
+        }
+    </script>
+    <!-- Зареждане на Google Maps API -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQ-0j9JWRt-_CGqPAzZP41yNj8Ko-B5js&callback=initMap">
+    </script>
+</body>
+</html>
